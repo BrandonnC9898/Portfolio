@@ -8,9 +8,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { ProjectsComponent } from './projects/projects.component';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @NgModule({
-  declarations: [AppComponent, AboutComponent],
+  declarations: [AppComponent, AboutComponent, ProjectsComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -18,6 +20,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatToolbarModule,
     MatButtonModule,
     MatMenuModule,
+    MatGridListModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
