@@ -2,3 +2,10 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Mine */
+.title-h1 {
+  font-weight: bold;
+  font-size: 50px;
+  line-height: normal;
+}
