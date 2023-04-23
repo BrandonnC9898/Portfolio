@@ -10,9 +10,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { ProjectsComponent } from './projects/projects.component';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { ContactComponent } from './contact/contact.component';
 
 @NgModule({
-  declarations: [AppComponent, AboutComponent, ProjectsComponent],
+  declarations: [AppComponent, AboutComponent, ProjectsComponent, ContactComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
