@@ -13,6 +13,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { ContactComponent } from './contact/contact.component';
 import { BlogComponent } from './blog/blog.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { B1LoadBalancerComponent } from './blog/blogs/b1-load-balancer/b1-load-balancer.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { MatDividerModule } from '@angular/material/divider';
     ProjectsComponent,
     ContactComponent,
     BlogComponent,
+    B1LoadBalancerComponent,
   ],
   imports: [
     BrowserModule,
