@@ -1,0 +1,10 @@
+:host {
+  height: 55%;
+  display: block;
+}
+
+.main {
+  text-align: center;
+  height: 100%;
+  padding: 100px 15%;
+}

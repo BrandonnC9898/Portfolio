@@ -11,9 +11,17 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ProjectsComponent } from './projects/projects.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { ContactComponent } from './contact/contact.component';
+import { BlogComponent } from './blog/blog.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
-  declarations: [AppComponent, AboutComponent, ProjectsComponent, ContactComponent],
+  declarations: [
+    AppComponent,
+    AboutComponent,
+    ProjectsComponent,
+    ContactComponent,
+    BlogComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -22,6 +30,7 @@ import { ContactComponent } from './contact/contact.component';
     MatButtonModule,
     MatMenuModule,
     MatGridListModule,
+    MatDividerModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
