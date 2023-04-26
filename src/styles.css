@@ -1,11 +1,54 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 /* Mine */
 .title-h1 {
   font-weight: bold;
   font-size: 50px;
   line-height: normal;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.script {
+  text-align: justify;
+  border: 1px;
+  border-style: solid;
+  border-color: black;
+  padding: 15px;
+  background-color: silver;
+  border-radius: 15px 15px;
+}
+
+.large-img {
+  width: 80%;
+  height: auto;
+  margin: 20px 0;
+}
+
+.small-img {
+  width: 40%;
+  height: auto;
+  margin: 20px 0;
+}
+
+.shell {
+  text-align: justify;
+  border: 1px;
+  border-style: solid;
+  border-color: black;
+  padding: 15px;
+  background-color: silver;
+  border-radius: 15px 15px;
 }

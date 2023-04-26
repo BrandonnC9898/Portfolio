@@ -1,0 +1,15 @@
+:host {
+  height: 75%;
+  display: block;
+}
+
+.main {
+  text-align: center;
+  height: 100%;
+  padding: 50px 70px;
+}
+
+p,
+h2 {
+  text-align: justify;
+}

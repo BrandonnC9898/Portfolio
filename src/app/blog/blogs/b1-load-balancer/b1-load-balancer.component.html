@@ -1,1 +1,244 @@
-<p>b1-load-balancer works!</p>
+<div class="main">
+  <h1 class="title-h1">Balanceador de carga con NodeJS, Docker y Nginx</h1>
+  <p>En esta ocasión, voy a compartir con ustedes un pequeño experimento en el cual compararemos el rendimiento de una
+    aplicación ejecutada en NodeJS, contra un balanceador de carga el cual redirigirá a dos instancias de la misma
+    aplicación. Simularemos un endpoint el cual tenga que hacer múltiples cálculos, por lo cual el proceso será
+    bloqueante para la aplicación.
+  </p>
+
+  <h2>Paso 1: Crear la aplicación</h2>
+  <p>
+    Primero creamos una aplicación con NestJS, para ello escribimos el siguiente comando en la terminal/consola, una vez
+    tengamos instalado NestJS cli. Luego, seleccionamos el administrador de paquetes preferido, en mi caso npm.
+  </p>
+
+  <div class="shell">
+    $ nest new load-test
+  </div>
+
+  <img class="large-img" src="assets/images/blogs/1-load-balancer/1.png" alt="">
+
+  <p>
+    Luego abrimos el proyecto con nuestro IDE o editor de textos preferido, en mi caso VSCode.
+  </p>
+
+  <div class="shell">
+    $ code load-test
+  </div>
+
+  <p>
+    Creamos un módulo llamado transaction, en cual agregamos un controlador y un servicio. Se usa la opción --flat para
+    evitar crear subcarpetas.
+  </p>
+
+  <div class="shell">
+    <div>$ nest g module transaction</div>
+    <div>$ nest g controller transaction/transaction --flat</div>
+    <div>$ nest g service transaction/transaction --flat</div>
+  </div>
+
+  <p>
+    El proyecto queda de la siguiente manera:
+  </p>
+
+  <img class="large-img" src="assets/images/blogs/1-load-balancer/2.png" alt="">
+
+  <p>
+    Ejecutamos la aplicación en modo desarrollador para efectuar cambios.
+  </p>
+
+  <div class="shell">
+    $ npm run start:dev
+  </div>
+
+  <p>
+    Modificamos <span class="italic">TransactionController</span> y <span class="italic">TransactionService</span> de la
+    siguiente manera:
+  </p>
+
+  <p><span class="italic">transaction.controller.ts</span></p>
+
+  <div class="script">
+    import &#123; Controller, Get &#125; from '@nestjs/common'; <br>
+    import &#123; TransactionService &#125; from './transaction.service'; <br>
+    <br>
+    <br>
+    @Controller('transaction') <br>
+    export class TransactionController &#123; <br>
+    constructor(private readonly service: TransactionService) &#123;&#125; <br>
+    <br>
+    <br>
+    @Get() <br>
+    calculate() &#123; <br>
+    return this.service.calculate(); <br>
+    &#125; <br>
+    &#125; <br>
+  </div>
+
+  <p><span class="italic">transaction.service.ts</span></p>
+
+  <div class="script">
+
+  </div>
+
+  <p>
+    Lo que se busca con los ciclos anidados es simular múltiples operaciones de cálculo, lo cual tomaría tiempo en una
+    aplicación real. Al llamar el endpoint en Postman, vemos que le toma algunos milisegundos completar la operación:
+  </p>
+
+  <img class="large-img" src="assets/images/blogs/1-load-balancer/3.png" alt="">
+
+  <h2>Paso 2: Agregar Dockerfile</h2>
+
+  <p>
+    En este paso agregamos un archivo Dockerfile al proyecto, para ello podemos tomar una plantilla para proyectos
+    basados en NestJS. Una que me parece muy útil es la que se muestra en el siguiente tutorial:
+    <a href="https://github.com/Saluki/nestjs-template/blob/master/Dockerfile">nestjs-template Dockerfile</a>.
+  </p>
+
+  <p>
+    Dado que se van a ejecutar dos instancias en puertos distintos, es necesario modificar el archivo main.ts para que
+    sea configurable el puerto desde una variable de entorno.
+  </p>
+
+  <p><span class="italic">main.ts</span></p>
+
+  <div class="script"></div>
+
+  <p>
+    Comprobamos el funcionamiento de la aplicación con otro puerto, estableciendo la variable de entorno en la
+    terminal/consola y luego ejecutamos el proyecto desde la misma.
+  </p>
+
+  <p>
+    Para windows:
+  </p>
+
+  <div class="shell">
+    $ env:PORT=3001 <br>
+    $ npm run start
+  </div>
+
+  <p>
+    Luego comprobamos en el navegador o postman:
+  </p>
+
+  <img class="small-img" src="assets/images/blogs/1-load-balancer/4.png" alt="">
+
+  <p>
+    Finalmente construimos la imagen del proyecto.
+  </p>
+
+  <div class="shell">
+    $ docker build -t load-test .
+  </div>
+
+  <p>
+    Podemos comprobar la imagen con el siguiente comando:
+  </p>
+
+  <div class="shell">
+    $ docker images
+  </div>
+
+  <img class="small-img" src="assets/images/blogs/1-load-balancer/5.png" alt="">
+
+  <p>
+    Finalmente ejecutamos una instancia en el puerto 3000 de la siguiente manera:
+  </p>
+
+  <div class="shell">
+    $ docker run -it -p 3000:3000 -e PORT=3000 --name load-test-1 load-test
+  </div>
+
+  <img class="large-img" src="assets/images/blogs/1-load-balancer/6.png" alt="">
+
+  <p>
+    Luego ejecutamos otra instancia con el puerto 3001.
+  </p>
+
+  <div class="shell">
+    $ docker run -it -p 3001:3001 -e PORT=3001 --name load-test-2 load-test
+  </div>
+
+  <img class="large-img" src="assets/images/blogs/1-load-balancer/7.png" alt="">
+
+  <h2>Paso 3: Servidor con Nginx</h2>
+
+  <p>
+    En este paso vamos a crear el balanceador de carga con Nginx.
+  </p>
+
+  <p>
+    Cree un archivo de configuración para Nginx y copie el siguiente código:
+  </p>
+
+  <div class="script"></div>
+
+  <p>
+    Para comprobar la dirección IP de los contenedores puede ejecutar el siguiente comando:
+  </p>
+
+  <div class="shell">
+    $ docker network inspect bridge
+  </div>
+
+  <img class="large-img" src="assets/images/blogs/1-load-balancer/8.png" alt="">
+
+  <p>Para ejecutar el balanceador, se debe ingresar el siguiente comando:</p>
+
+  <div class="shell">
+    $ docker run --name nginx-load-test -v
+    /home/brandonn/programming/blogs/nginx-load-test/nginx.conf:/etc/nginx/nginx.conf:ro -it -p 8080:80 nginx
+  </div>
+
+  <p>
+    Se puede comprobar el correcto funcionamiento de Nginx en el navegador o Postman:
+  </p>
+
+  <img class="small-img" src="assets/images/blogs/1-load-balancer/9.png" alt="">
+
+  <h2>Pruebas de carga</h2>
+
+  <p>
+    Para las pruebas de carga utilizaremos JMeter. Simularemos 100 usuarios realizando 10 peticiones al endpoint
+    <span>/transaction</span>. Para ello primero creamos un Thread Group, en el cual configuramos 100 usuarios con un
+    loop de 10.
+  </p>
+
+  <img class="large-img" src="assets/images/blogs/1-load-balancer/10.png" alt="">
+
+  <p>
+    En el grupo agregamos una petición HTTP que llame a la dirección <code>http://localhost:3000/transaction</code>.
+    Luego dos
+    listener, el primero para comprobar que la respuesta sea la esperada y el segundo para obtener un resumen de la
+    prueba.
+  </p>
+
+  <img class="large-img" src="assets/images/blogs/1-load-balancer/11.png" alt="">
+  <img class="large-img" class="small-img" src="assets/images/blogs/1-load-balancer/12.png" alt="">
+
+  <p>
+    Finalmente ejecutamos la primer prueba para solo uno de los contenedores:
+  </p>
+
+  <img class="large-img" src="assets/images/blogs/1-load-balancer/13.png" alt="">
+
+  <p>
+    Dado que los resultados son satisfactorios, podemos eliminar o desactivar el primer listener y ejecutar de nuevo la
+    prueba.
+  </p>
+
+  <img class="large-img" src="assets/images/blogs/1-load-balancer/14.png" alt="">
+
+  <p>
+    En esta primera prueba obtuvimos un rendimiento (<span class="italic">throughput</span>) de 128.5/sec, lo que
+    significa que se resolvieron 128.5
+    peticiones por segundo. Ahora en la petición HTTP reemplazamos el puerto 3000 por 8080.
+  </p>
+
+  <img class="large-img" src="assets/images/blogs/1-load-balancer/15.png" alt="">
+
+  <p>En este caso vemos que el rendimiento aumentó significativamente, exactamente hasta 247.3/sec, con lo cual se
+    evidencia el poder de tener múltiples instancias de una aplicación en Nodejs.</p>
+</div>
