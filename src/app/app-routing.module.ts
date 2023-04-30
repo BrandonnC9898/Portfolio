@@ -6,6 +6,7 @@ import { ProjectsComponent } from './projects/projects.component';
 import { ContactComponent } from './contact/contact.component';
 import { BlogComponent } from './blog/blog.component';
 import { B1LoadBalancerComponent } from './blog/blogs/b1-load-balancer/b1-load-balancer.component';
+import { B2AuthenticationAppComponent } from './blog/blogs/b2-authentication-app/b2-authentication-app.component';
 
 const routes: Routes = [
   { path: 'about', component: AboutComponent },
@@ -18,6 +19,10 @@ const routes: Routes = [
   {
     path: 'blog/load-balancer-with-node-docker-ngingx',
     component: B1LoadBalancerComponent,
+  },
+  {
+    path: 'blog/authentication-application-nodejs',
+    component: B2AuthenticationAppComponent,
   },
 ];
 

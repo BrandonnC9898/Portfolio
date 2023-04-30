@@ -14,6 +14,7 @@ import { ContactComponent } from './contact/contact.component';
 import { BlogComponent } from './blog/blog.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { B1LoadBalancerComponent } from './blog/blogs/b1-load-balancer/b1-load-balancer.component';
+import { B2AuthenticationAppComponent } from './blog/blogs/b2-authentication-app/b2-authentication-app.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { B1LoadBalancerComponent } from './blog/blogs/b1-load-balancer/b1-load-b
     ContactComponent,
     BlogComponent,
     B1LoadBalancerComponent,
+    B2AuthenticationAppComponent,
   ],
   imports: [
     BrowserModule,
